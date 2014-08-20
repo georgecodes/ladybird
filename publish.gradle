@@ -1,9 +1,7 @@
-apply plugin: 'java'
-apply plugin: 'maven'
+apply from: 'build.gradle'
+
 apply plugin: 'signing'
 
-group='com.elevenware'
-version='1.0-SNAPSHOT'
 archivesBaseName='ladybird'
 
 task javadocJar(type: Jar) {
@@ -17,25 +15,11 @@ task sourcesJar(type: Jar) {
 }
 
 artifacts {
-    archives javadocJar, sourcesJar
+    archives jar, javadocJar, sourcesJar
 }
 
 signing {
     sign configurations.archives
-}
-
-repositories {
-    mavenCentral()
-}
-
-dependencies {
-    testCompile "junit:junit:4.11"
-    testCompile "org.eclipse.jetty.aggregate:jetty-all-server:8.1.15.v20140411"
-    compile "org.yaml:snakeyaml:1.13"
-    compile "org.codehaus.groovy:groovy-all:2.4.0-beta-1"
-    compile "org.apache.httpcomponents:httpclient:4.3.5"
-    compile "com.fasterxml.jackson.core:jackson-core:2.3.3"
-    compile "com.fasterxml.jackson.core:jackson-databind:2.3.3"
 }
 
 uploadArchives {
@@ -52,15 +36,15 @@ uploadArchives {
             }
 
             pom.project {
-                name 'daletech'
+                name 'ladybird'
                 packaging 'jar'
-                // optionally artifactId can be defined here
-                url 'http://www.georgemcintosh.com/daletech'
+                description 'A simple Rest client'
+                url 'http://www.georgemcintosh.com/ladybird'
 
                 scm {
-                    connection 'scm:svn:http://foo.googlecode.com/svn/trunk/'
-                    developerConnection 'scm:svn:https://foo.googlecode.com/svn/trunk/'
-                    url 'http://foo.googlecode.com/svn/trunk/'
+                    connection 'scm:git:git://bitbucket.org/georgemc/ladybird.git'
+                    developerConnection 'scm:git:git://bitbucket.org/georgemc/ladybird.git'
+                    url 'scm:git:git://bitbucket.org/georgemc/ladybird.git'
                 }
 
                 licenses {

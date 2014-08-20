@@ -4,28 +4,10 @@ apply plugin: 'signing'
 
 group='com.elevenware'
 version='1.0-SNAPSHOT'
-archivesBaseName='ladybird'
-
-task javadocJar(type: Jar) {
-    classifier = 'javadoc'
-    from javadoc
-}
-
-task sourcesJar(type: Jar) {
-    classifier = 'sources'
-    from sourceSets.main.allSource
-}
-
-artifacts {
-    archives javadocJar, sourcesJar
-}
-
-signing {
-    sign configurations.archives
-}
 
 repositories {
     mavenCentral()
+    mavenLocal()
 }
 
 dependencies {
@@ -36,48 +18,4 @@ dependencies {
     compile "org.apache.httpcomponents:httpclient:4.3.5"
     compile "com.fasterxml.jackson.core:jackson-core:2.3.3"
     compile "com.fasterxml.jackson.core:jackson-databind:2.3.3"
-}
-
-uploadArchives {
-    repositories {
-        mavenDeployer {
-            beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
-
-            repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
-                authentication(userName: sonatypeUsername, password: sonatypePassword)
-            }
-
-            snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
-                authentication(userName: sonatypeUsername, password: sonatypePassword)
-            }
-
-            pom.project {
-                name 'ladybird'
-                packaging 'jar'
-                // optionally artifactId can be defined here
-                url 'http://www.georgemcintosh.com/daletech'
-
-                scm {
-                    connection 'scm:svn:http://foo.googlecode.com/svn/trunk/'
-                    developerConnection 'scm:svn:https://foo.googlecode.com/svn/trunk/'
-                    url 'http://foo.googlecode.com/svn/trunk/'
-                }
-
-                licenses {
-                    license {
-                        name 'The Apache License, Version 2.0'
-                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-                    }
-                }
-
-                developers {
-                    developer {
-                        id 'georgemc'
-                        name 'George McIntosh'
-                        email 'george@georgemcintosh.com'
-                    }
-                }
-            }
-        }
-    }
 }
