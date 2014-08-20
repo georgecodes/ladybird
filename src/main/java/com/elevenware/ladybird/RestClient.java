@@ -16,13 +16,19 @@ import java.io.StringWriter;
 public class RestClient {
 
     private final CloseableHttpClient httpClient;
+    private final String base;
 
     public RestClient() {
-        this.httpClient = HttpClients.createDefault();
+        this("");
     }
 
-    public RestResponse get(String request) {
-        HttpGet get = new HttpGet(request);
+    public RestClient(String base) {
+        this.httpClient = HttpClients.createDefault();
+        this.base = "".concat(base);
+    }
+
+    public RestResponse get(String path) {
+        HttpGet get = new HttpGet(base.concat(path));
         try {
             CloseableHttpResponse response = httpClient.execute(get);
             HttpEntity entity1 = response.getEntity();
@@ -41,7 +47,7 @@ public class RestClient {
     }
 
     public RestResponse getJson(String path, Class clazz) {
-        HttpGet get = new HttpGet(path);
+        HttpGet get = new HttpGet(base.concat(path));
         get.setHeader("Accept", "application/json");
         CloseableHttpResponse response = null;
         try {
@@ -59,7 +65,7 @@ public class RestClient {
 
     public RestResponse postJson(String path, Object body) {
         Class clazz = body.getClass();
-        HttpPost post = new HttpPost(path);
+        HttpPost post = new HttpPost(base.concat(path));
         post.setHeader("Accept", "application/json");
         post.setHeader("ContentType", "application/json");
         StringWriter writer = new StringWriter();
@@ -80,7 +86,7 @@ public class RestClient {
 
     public RestResponse post(String path, String body) {
 
-        HttpPost post = new HttpPost(path);
+        HttpPost post = new HttpPost(base.concat(path));
         post.setHeader("Accept", "text/plain");
         post.setHeader("ContentType", "text/plain");
         HttpEntity entity = new StringEntity(body, ContentType.TEXT_PLAIN);
@@ -104,7 +110,7 @@ public class RestClient {
     }
 
     public RestResponse put(String path, String body) {
-        HttpPut post = new HttpPut(path);
+        HttpPut post = new HttpPut(base.concat(path));
         post.setHeader("Accept", "text/plain");
         post.setHeader("ContentType", "text/plain");
         HttpEntity entity = new StringEntity(body, ContentType.TEXT_PLAIN);
@@ -127,8 +133,8 @@ public class RestClient {
         return null;
     }
 
-    public RestResponse delete(String resource) {
-        HttpDelete delete = new HttpDelete(resource);
+    public RestResponse delete(String path) {
+        HttpDelete delete = new HttpDelete(base.concat(path));
         try {
             CloseableHttpResponse response = httpClient.execute(delete);
             return new ObjectResponse(response.getStatusLine().getStatusCode(), null);

@@ -52,7 +52,7 @@ uploadArchives {
             }
 
             pom.project {
-                name 'ladybird'
+                name 'daletech'
                 packaging 'jar'
                 // optionally artifactId can be defined here
                 url 'http://www.georgemcintosh.com/daletech'
