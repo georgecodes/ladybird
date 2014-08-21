@@ -38,7 +38,7 @@ uploadArchives {
             pom.project {
                 name 'ladybird'
                 packaging 'jar'
-                description 'A simple Rest client'
+                description 'A fluent API over the Apache Http client'
                 url 'http://www.georgemcintosh.com/ladybird'
 
                 scm {

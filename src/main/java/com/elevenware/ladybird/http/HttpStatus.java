@@ -1,6 +1,6 @@
-package com.elevenware.ladybird;
+package com.elevenware.ladybird.http;
 
-public class HttpStatusCodes {
+public class HttpStatus {
 
     public static final int SC_CONTINUE = 100;
     public static final int SC_SWITCHING_PROTOCOLS = 101;

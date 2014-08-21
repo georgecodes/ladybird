@@ -1,4 +1,4 @@
-package com.elevenware.ladybird;
+package com.elevenware.ladybird.http;
 
 public class MimeTypes {
 
