@@ -1,7 +1,7 @@
 package com.elevenware.ladybird.client;
 
+import com.elevenware.ladybird.HttpResponse;
 import com.elevenware.ladybird.ObjectResponse;
-import com.elevenware.ladybird.RestResponse;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.*;
 import org.apache.http.entity.ContentType;
@@ -13,70 +13,70 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-public class RestClient {
+public class LadybirdClient {
 
-    private InnerRestClient delegate;
+    private HttpClientDelegate delegate;
 
-    public RestClient() {
+    public LadybirdClient() {
         this("");
     }
 
-    public RestClient(String base) {
+    public LadybirdClient(String base) {
 
-        this.delegate = new InnerRestClient(base);
+        this.delegate = new HttpClientDelegate(base);
     }
 
-    public RestResponse get(String path) {
-        return new BuildableRestRequest(delegate)
+    public HttpResponse get(String path) {
+        return new HttpRequestBuilder(delegate)
             .get(path);
     }
 
-    public RestResponse post(String path, String entity) {
-        return new BuildableRestRequest(delegate)
+    public HttpResponse post(String path, String entity) {
+        return new HttpRequestBuilder(delegate)
                 .post(path, entity);
     }
 
-    public RestResponse put(String path, String entity) {
-        return new BuildableRestRequest(delegate)
+    public HttpResponse put(String path, String entity) {
+        return new HttpRequestBuilder(delegate)
                 .put(path, entity);
     }
 
-    public RestResponse delete(String path) {
-        return new BuildableRestRequest(delegate)
+    public HttpResponse delete(String path) {
+        return new HttpRequestBuilder(delegate)
                 .delete(path);
     }
 
-    public BuildableRestRequest withHeader(String headerName, String header) {
-        return new BuildableRestRequest(delegate)
+    public HttpRequestBuilder withHeader(String headerName, String header) {
+        return new HttpRequestBuilder(delegate)
             .addHeader(headerName, header);
     }
 
-    public BuildableRestRequest acceptJson() {
-        return new BuildableRestRequest(delegate)
+    public HttpRequestBuilder acceptJson() {
+        return new HttpRequestBuilder(delegate)
            .acceptJson();
     }
 
-    public BuildableRestRequest acceptXml() {
-        return new BuildableRestRequest(delegate)
+    public HttpRequestBuilder acceptXml() {
+        return new HttpRequestBuilder(delegate)
             .acceptXml();
     }
 
-    public BuildableRestRequest sendJson() {
-        return new BuildableRestRequest(delegate)
+    public HttpRequestBuilder sendJson() {
+        return new HttpRequestBuilder(delegate)
                 .sendJson();
     }
 
-    public BuildableRestRequest sendXml() {
-        return new BuildableRestRequest(delegate)
+    public HttpRequestBuilder sendXml() {
+        return new HttpRequestBuilder(delegate)
                 .sendXml();
     }
 
-    static class InnerRestClient {
+    static class HttpClientDelegate {
 
         private final String base;
         private final CloseableHttpClient httpClient;
 
-        InnerRestClient(String base) {
+        HttpClientDelegate(String base) {
             if(!base.endsWith("/")) {
                 base = base.concat("/");
             }
@@ -84,7 +84,7 @@ public class RestClient {
             this.base = "".concat(base);
         }
 
-        public RestResponse doGet(BuildableRestRequest request) {
+        public HttpResponse doGet(HttpRequestBuilder request) {
             String path = request.getPath();
             HttpGet get = new HttpGet(path);
             request.populateHeaders(get);
@@ -99,18 +99,18 @@ public class RestClient {
                     buf.append(line);
                 }
                 String body = buf.toString();
-                return new ObjectResponse(response.getStatusLine().getStatusCode(), body);
+                return new ObjectResponse(response, body);
             } catch (IOException e) {
                 e.printStackTrace();
             }
             return null;
         }
 
-        public RestResponse doPost(BuildableRestRequest request, String body) {
+        public HttpResponse doPost(HttpRequestBuilder request, String body) {
         String path = request.getPath();
         HttpPost post = new HttpPost(path);
         request.populateHeaders(post);
-        HttpEntity entity = new StringEntity(body, ContentType.parse(request.getContentType()));
+        HttpEntity entity = new StringEntity(body, request.getContentType());
         post.setEntity(entity);
         CloseableHttpResponse response = null;
         try {
@@ -123,18 +123,18 @@ public class RestClient {
             while((line = reader.readLine()) != null) {
                 buf.append(line);
             }
-            return new ObjectResponse(response.getStatusLine().getStatusCode(), buf.toString());
+            return new ObjectResponse(response, buf.toString());
         } catch (IOException e) {
             e.printStackTrace();
         }
         return null;
     }
 
-        public RestResponse doPut(BuildableRestRequest request, String body) {
+        public HttpResponse doPut(HttpRequestBuilder request, String body) {
             String path = request.getPath();
             HttpPut put = new HttpPut(path);
             request.populateHeaders(put);
-            HttpEntity entity = new StringEntity(body, ContentType.parse(request.getContentType()));
+            HttpEntity entity = new StringEntity(body, request.getContentType());
             put.setEntity(entity);
             CloseableHttpResponse response = null;
             try {
@@ -147,20 +147,20 @@ public class RestClient {
                 while((line = reader.readLine()) != null) {
                     buf.append(line);
                 }
-                return new ObjectResponse(response.getStatusLine().getStatusCode(), buf.toString());
+                return new ObjectResponse(response, buf.toString());
             } catch (IOException e) {
                 e.printStackTrace();
             }
             return null;
         }
 
-        public RestResponse doDelete(BuildableRestRequest request) {
+        public HttpResponse doDelete(HttpRequestBuilder request) {
             String path = request.getPath();
             HttpDelete delete = new HttpDelete(path);
             request.populateHeaders(delete);
             try {
                 CloseableHttpResponse response = httpClient.execute(delete);
-                return new ObjectResponse(response.getStatusLine().getStatusCode(), null);
+                return new ObjectResponse(response, null);
             } catch (IOException e) {
                 e.printStackTrace();
             }

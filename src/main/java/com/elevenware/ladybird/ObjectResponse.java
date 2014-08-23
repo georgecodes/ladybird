@@ -1,17 +1,19 @@
 package com.elevenware.ladybird;
 
-public class ObjectResponse implements RestResponse {
-    private final int status;
+import org.apache.http.client.methods.CloseableHttpResponse;
+
+public class ObjectResponse implements HttpResponse {
+    private final CloseableHttpResponse response;
     private final Object payload;
 
-    public ObjectResponse(int statusCode, Object payload) {
-        this.status = statusCode;
+    public ObjectResponse(CloseableHttpResponse response, Object payload) {
+        this.response = response;
         this.payload = payload;
     }
 
     @Override
     public int statusCode() {
-        return status;
+        return response.getStatusLine().getStatusCode();
     }
 
     @Override

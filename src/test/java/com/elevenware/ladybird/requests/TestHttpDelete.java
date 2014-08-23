@@ -1,7 +1,6 @@
-package com.elevenware.ladybird;
+package com.elevenware.ladybird.requests;
 
-import com.elevenware.ladybird.client.RestClient;
-import com.elevenware.ladybird.http.MimeTypes;
+import com.elevenware.ladybird.client.LadybirdClient;
 import com.elevenware.ladybird.kit.AbstractHttpRecordingTestCase;
 import com.elevenware.ladybird.kit.RecordableHttpRequest;
 import org.junit.Test;
@@ -15,7 +14,7 @@ public class TestHttpDelete extends AbstractHttpRecordingTestCase {
 
         String path = "/testpath";
 
-        RestClient client = new RestClient("http://localhost:8080");
+        LadybirdClient client = new LadybirdClient("http://localhost:8080");
         client.delete(path);
 
         RecordableHttpRequest requestRecording = getLast();
@@ -31,7 +30,7 @@ public class TestHttpDelete extends AbstractHttpRecordingTestCase {
         String path = "/testpath";
         String params = "param1=hello";
 
-        RestClient client = new RestClient("http://localhost:8080");
+        LadybirdClient client = new LadybirdClient("http://localhost:8080");
         client.delete(path.concat("?").concat(params));
 
         RecordableHttpRequest requestRecording = getLast();
@@ -48,7 +47,7 @@ public class TestHttpDelete extends AbstractHttpRecordingTestCase {
 
         String path = "/testpath";
 
-        RestClient client = new RestClient("http://localhost:8080");
+        LadybirdClient client = new LadybirdClient("http://localhost:8080");
         client.withHeader("Foo", "Bar").delete(path);
 
         RecordableHttpRequest requestRecording = getLast();

@@ -1,31 +1,29 @@
 package com.elevenware.ladybird.client;
 
-import com.elevenware.ladybird.RestResponse;
-import com.elevenware.ladybird.http.MimeTypes;
+import com.elevenware.ladybird.HttpResponse;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.entity.ContentType;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-public class BuildableRestRequest {
+public class HttpRequestBuilder {
 
     private static final String CONTENT_TYPE = "ContentType";
     private static final String ACCEPT = "Accept";
 
-    private final RestClient.InnerRestClient client;
+    private final LadybirdClient.HttpClientDelegate client;
     private String path;
     private Map<String, String> headers;
 
-    public BuildableRestRequest(RestClient.InnerRestClient client) {
+    public HttpRequestBuilder(LadybirdClient.HttpClientDelegate client) {
         this.client = client;
         this.headers = new HashMap<>();
-        addHeader(ACCEPT, "*/*");
-        addHeader(CONTENT_TYPE, MimeTypes.TEXT_PLAIN);
+        addHeader(ACCEPT, ContentType.WILDCARD.getMimeType());
+        addHeader(CONTENT_TYPE, ContentType.TEXT_PLAIN.getMimeType());
     }
 
-    public BuildableRestRequest setPath(String path) {
+    public HttpRequestBuilder setPath(String path) {
         this.path = normalise(path);
         return this;
     }
@@ -34,27 +32,27 @@ public class BuildableRestRequest {
         return path;
     }
 
-    public BuildableRestRequest addHeader(String headerName, String header) {
+    public HttpRequestBuilder addHeader(String headerName, String header) {
         headers.put(headerName, header);
         return this;
     }
 
-    public RestResponse get(String path) {
+    public HttpResponse get(String path) {
         setPath(path);
         return client.doGet(this);
     }
 
-    public RestResponse post(String path, String body) {
+    public HttpResponse post(String path, String body) {
         setPath(path);
         return client.doPost(this, body);
     }
 
-    public RestResponse put(String path, String body) {
+    public HttpResponse put(String path, String body) {
         setPath(path);
         return client.doPut(this, body);
     }
 
-    public RestResponse delete(String path) {
+    public HttpResponse delete(String path) {
         setPath(path);
         return client.doDelete(this);
     }
@@ -72,25 +70,25 @@ public class BuildableRestRequest {
         }
     }
 
-    public BuildableRestRequest acceptJson() {
-        return addHeader(ACCEPT, MimeTypes.APPLICATION_JSON);
+    public HttpRequestBuilder acceptJson() {
+        return addHeader(ACCEPT, ContentType.APPLICATION_JSON.getMimeType());
     }
 
-    public BuildableRestRequest acceptXml() {
-        return addHeader(ACCEPT, MimeTypes.APPLICATION_XML);
+    public HttpRequestBuilder acceptXml() {
+        return addHeader(ACCEPT, ContentType.APPLICATION_XML.getMimeType());
     }
 
 
-    public String getContentType() {
-        return headers.get(CONTENT_TYPE);
+    public ContentType getContentType() {
+        return ContentType.parse(headers.get(CONTENT_TYPE));
     }
 
-    public BuildableRestRequest sendJson() {
-        return addHeader(CONTENT_TYPE, MimeTypes.APPLICATION_JSON);
+    public HttpRequestBuilder sendJson() {
+        return addHeader(CONTENT_TYPE, ContentType.APPLICATION_JSON.getMimeType());
     }
 
-    public BuildableRestRequest sendXml() {
-        return addHeader(CONTENT_TYPE, MimeTypes.APPLICATION_XML);
+    public HttpRequestBuilder sendXml() {
+        return addHeader(CONTENT_TYPE, ContentType.APPLICATION_XML.getMimeType());
     }
 
 

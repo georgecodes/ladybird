@@ -1,6 +1,6 @@
 package com.elevenware.ladybird;
 
-public interface RestResponse {
+public interface HttpResponse {
 
     int statusCode();
     <T> T getEntity();

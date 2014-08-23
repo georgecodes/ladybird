@@ -1,6 +1,6 @@
 package com.elevenware.ladybird.kit;
 
-import com.elevenware.ladybird.http.HttpStatus;
+import org.apache.http.HttpStatus;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
 

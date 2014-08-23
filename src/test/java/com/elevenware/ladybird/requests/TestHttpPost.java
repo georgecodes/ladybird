@@ -1,9 +1,9 @@
-package com.elevenware.ladybird;
+package com.elevenware.ladybird.requests;
 
-import com.elevenware.ladybird.client.RestClient;
-import com.elevenware.ladybird.http.MimeTypes;
+import com.elevenware.ladybird.client.LadybirdClient;
 import com.elevenware.ladybird.kit.AbstractHttpRecordingTestCase;
 import com.elevenware.ladybird.kit.RecordableHttpRequest;
+import org.apache.http.entity.ContentType;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -17,7 +17,7 @@ public class TestHttpPost extends AbstractHttpRecordingTestCase {
 
         String path = "/body";
 
-        RestClient client = new RestClient("http://localhost:8080");
+        LadybirdClient client = new LadybirdClient("http://localhost:8080");
         client.post(path, "Hello");
 
         RecordableHttpRequest requestRecording = getLast();
@@ -36,7 +36,7 @@ public class TestHttpPost extends AbstractHttpRecordingTestCase {
         String path = "/testpath";
         String params = "param1=hello";
 
-        RestClient client = new RestClient("http://localhost:8080");
+        LadybirdClient client = new LadybirdClient("http://localhost:8080");
         client.post(path.concat("?").concat(params), "Hello there");
 
         RecordableHttpRequest requestRecording = getLast();
@@ -53,7 +53,7 @@ public class TestHttpPost extends AbstractHttpRecordingTestCase {
 
         String path = "/testpath";
 
-        RestClient client = new RestClient("http://localhost:8080");
+        LadybirdClient client = new LadybirdClient("http://localhost:8080");
         client.withHeader("Foo", "Bar").post(path, "Hello");
 
         RecordableHttpRequest requestRecording = getLast();
@@ -67,12 +67,12 @@ public class TestHttpPost extends AbstractHttpRecordingTestCase {
 
         String path = "/testpath";
 
-        RestClient client = new RestClient("http://localhost:8080");
+        LadybirdClient client = new LadybirdClient("http://localhost:8080");
         client.sendJson().post(path, "Hello");
 
         RecordableHttpRequest requestRecording = getLast();
 
-        assertEquals(MimeTypes.APPLICATION_JSON, requestRecording.getHeader("ContentType"));
+        assertEquals(ContentType.APPLICATION_JSON.getMimeType(), requestRecording.getHeader("ContentType"));
 
     }
 
@@ -81,13 +81,13 @@ public class TestHttpPost extends AbstractHttpRecordingTestCase {
 
         String path = "/testpath";
 
-        RestClient client = new RestClient("http://localhost:8080");
+        LadybirdClient client = new LadybirdClient("http://localhost:8080");
         client.withHeader("Foo", "Bar").sendJson().post(path, "Hello");
 
         RecordableHttpRequest requestRecording = getLast();
 
         assertEquals("Bar", requestRecording.getHeader("Foo"));
-        assertEquals(MimeTypes.APPLICATION_JSON, requestRecording.getHeader("ContentType"));
+        assertEquals(ContentType.APPLICATION_JSON.getMimeType(), requestRecording.getHeader("ContentType"));
 
     }
 
@@ -96,12 +96,12 @@ public class TestHttpPost extends AbstractHttpRecordingTestCase {
 
         String path = "/testpath";
 
-        RestClient client = new RestClient("http://localhost:8080");
+        LadybirdClient client = new LadybirdClient("http://localhost:8080");
         client.sendXml().post(path, "Hello");
 
         RecordableHttpRequest requestRecording = getLast();
 
-        assertEquals(MimeTypes.APPLICATION_XML, requestRecording.getHeader("ContentType"));
+        assertEquals(ContentType.APPLICATION_XML.getMimeType(), requestRecording.getHeader("ContentType"));
 
     }
 
@@ -110,12 +110,12 @@ public class TestHttpPost extends AbstractHttpRecordingTestCase {
 
         String path = "/testpath";
 
-        RestClient client = new RestClient("http://localhost:8080");
+        LadybirdClient client = new LadybirdClient("http://localhost:8080");
         client.withHeader("Foo", "Bar").sendXml().post(path, "Hello");
 
         RecordableHttpRequest requestRecording = getLast();
 
-        assertEquals(MimeTypes.APPLICATION_XML, requestRecording.getHeader("ContentType"));
+        assertEquals(ContentType.APPLICATION_XML.getMimeType(), requestRecording.getHeader("ContentType"));
         assertEquals("Bar", requestRecording.getHeader("Foo"));
 
     }
