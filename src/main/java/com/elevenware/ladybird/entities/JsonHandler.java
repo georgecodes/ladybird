@@ -11,7 +11,11 @@ public class JsonHandler implements ContentHandler {
         try {
             return (T) mapper.readValue(payload, clazz);
         } catch (IOException e) {
-            throw new UnmarshallingException();
+            StringBuilder builder = new StringBuilder("Unable to unmarshall response to")
+                    .append(clazz)
+                    .append(" as this body does not appear to be valid JSON:\n")
+                    .append(payload);
+            throw new UnmarshallingException(builder.toString(), e);
         }
     }
 }

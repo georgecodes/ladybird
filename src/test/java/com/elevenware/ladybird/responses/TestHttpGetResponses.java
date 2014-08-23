@@ -2,6 +2,7 @@ package com.elevenware.ladybird.responses;
 
 import com.elevenware.ladybird.HttpResponse;
 import com.elevenware.ladybird.client.LadybirdClient;
+import com.elevenware.ladybird.entities.UnmarshallingException;
 import com.elevenware.ladybird.kit.AbstractHttpServingTestCase;
 import com.elevenware.ladybird.kit.CannedResponseHandler;
 import com.elevenware.ladybird.model.Person;
@@ -80,6 +81,21 @@ public class TestHttpGetResponses extends AbstractHttpServingTestCase {
         Object person = response.getEntity(Person.class);
 
         assertEquals(responseMessage, person);
+
+    }
+
+    @Test( expected = UnmarshallingException.class)
+    public void throwsExceptionIfContentIsNotActuallyJson() {
+
+        final String responseMessage = "So this is not JSON";
+
+        ContextHandler handler =  new ContextHandler("/json");
+        handler.setHandler(new CannedResponseHandler(responseMessage));
+        setRealHandler(handler);
+
+        LadybirdClient client = LadybirdClient.forLocalhost();
+        HttpResponse response = client.acceptJson().get("/json");
+        Person person = response.getEntity(Person.class);
 
     }
 
