@@ -4,7 +4,6 @@ import com.elevenware.ladybird.HttpResponse;
 import com.elevenware.ladybird.ObjectResponse;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.*;
-import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
@@ -24,6 +23,10 @@ public class LadybirdClient {
     public LadybirdClient(String base) {
 
         this.delegate = new HttpClientDelegate(base);
+    }
+
+    public static LadybirdClient forLocalhost() {
+        return new LadybirdClient("http://localhost:8080");
     }
 
     public HttpResponse get(String path) {
@@ -99,7 +102,7 @@ public class LadybirdClient {
                     buf.append(line);
                 }
                 String body = buf.toString();
-                return new ObjectResponse(response, body);
+                return new ObjectResponse(response, body, request.getAccet());
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -123,7 +126,7 @@ public class LadybirdClient {
             while((line = reader.readLine()) != null) {
                 buf.append(line);
             }
-            return new ObjectResponse(response, buf.toString());
+            return new ObjectResponse(response, buf.toString(), request.getAccet());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -147,7 +150,7 @@ public class LadybirdClient {
                 while((line = reader.readLine()) != null) {
                     buf.append(line);
                 }
-                return new ObjectResponse(response, buf.toString());
+                return new ObjectResponse(response, buf.toString(), request.getAccet());
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -160,7 +163,7 @@ public class LadybirdClient {
             request.populateHeaders(delete);
             try {
                 CloseableHttpResponse response = httpClient.execute(delete);
-                return new ObjectResponse(response, null);
+                return new ObjectResponse(response, null, request.getAccet());
             } catch (IOException e) {
                 e.printStackTrace();
             }

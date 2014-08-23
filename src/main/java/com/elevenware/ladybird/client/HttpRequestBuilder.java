@@ -83,6 +83,10 @@ public class HttpRequestBuilder {
         return ContentType.parse(headers.get(CONTENT_TYPE));
     }
 
+    public ContentType getAccet() {
+        return ContentType.parse(headers.get(ACCEPT));
+    }
+
     public HttpRequestBuilder sendJson() {
         return addHeader(CONTENT_TYPE, ContentType.APPLICATION_JSON.getMimeType());
     }
