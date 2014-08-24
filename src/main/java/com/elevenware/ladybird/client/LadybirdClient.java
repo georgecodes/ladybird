@@ -80,7 +80,7 @@ public class LadybirdClient {
         private final CloseableHttpClient httpClient;
 
         HttpClientDelegate(String base) {
-            if(!base.endsWith("/")) {
+            if(base.length() != 0 && !base.endsWith("/")) {
                 base = base.concat("/");
             }
             this.httpClient = HttpClients.createDefault();
@@ -102,7 +102,7 @@ public class LadybirdClient {
                     buf.append(line);
                 }
                 String body = buf.toString();
-                return new ObjectResponse(response, body, request.getAccet());
+                return new ObjectResponse(response, body, request.getAccept());
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -126,7 +126,7 @@ public class LadybirdClient {
             while((line = reader.readLine()) != null) {
                 buf.append(line);
             }
-            return new ObjectResponse(response, buf.toString(), request.getAccet());
+            return new ObjectResponse(response, buf.toString(), request.getAccept());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -150,7 +150,7 @@ public class LadybirdClient {
                 while((line = reader.readLine()) != null) {
                     buf.append(line);
                 }
-                return new ObjectResponse(response, buf.toString(), request.getAccet());
+                return new ObjectResponse(response, buf.toString(), request.getAccept());
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -163,7 +163,7 @@ public class LadybirdClient {
             request.populateHeaders(delete);
             try {
                 CloseableHttpResponse response = httpClient.execute(delete);
-                return new ObjectResponse(response, null, request.getAccet());
+                return new ObjectResponse(response, null, request.getAccept());
             } catch (IOException e) {
                 e.printStackTrace();
             }

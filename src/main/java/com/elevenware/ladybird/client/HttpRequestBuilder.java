@@ -1,6 +1,8 @@
 package com.elevenware.ladybird.client;
 
 import com.elevenware.ladybird.HttpResponse;
+import com.elevenware.ladybird.entities.ContentHandler;
+import com.elevenware.ladybird.entities.ContentHandlers;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.entity.ContentType;
 
@@ -52,6 +54,12 @@ public class HttpRequestBuilder {
         return client.doPut(this, body);
     }
 
+    public HttpResponse put(String path, Object payload) {
+        ContentHandler handler = ContentHandlers.getInstance().forType(getContentType(), null);
+        String entity = handler.marshal(payload);
+        return put(path, entity);
+    }
+
     public HttpResponse delete(String path) {
         setPath(path);
         return client.doDelete(this);
@@ -83,7 +91,7 @@ public class HttpRequestBuilder {
         return ContentType.parse(headers.get(CONTENT_TYPE));
     }
 
-    public ContentType getAccet() {
+    public ContentType getAccept() {
         return ContentType.parse(headers.get(ACCEPT));
     }
 
@@ -94,6 +102,5 @@ public class HttpRequestBuilder {
     public HttpRequestBuilder sendXml() {
         return addHeader(CONTENT_TYPE, ContentType.APPLICATION_XML.getMimeType());
     }
-
 
 }

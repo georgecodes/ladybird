@@ -15,7 +15,7 @@ public class TestHttpGet extends AbstractHttpRecordingTestCase {
 
         String path = "/testpath";
 
-        LadybirdClient client = new LadybirdClient("http://localhost:8080");
+        LadybirdClient client = LadybirdClient.forLocalhost();
         client.get(path);
 
         RecordableHttpRequest requestRecording = getLast();
@@ -31,7 +31,7 @@ public class TestHttpGet extends AbstractHttpRecordingTestCase {
         String path = "/testpath";
         String params = "param1=hello";
 
-        LadybirdClient client = new LadybirdClient("http://localhost:8080");
+        LadybirdClient client = LadybirdClient.forLocalhost();
         client.get(path.concat("?").concat(params));
 
         RecordableHttpRequest requestRecording = getLast();
@@ -48,7 +48,7 @@ public class TestHttpGet extends AbstractHttpRecordingTestCase {
 
         String path = "/testpath";
 
-        LadybirdClient client = new LadybirdClient("http://localhost:8080");
+        LadybirdClient client = LadybirdClient.forLocalhost();
         client.withHeader("Foo", "Bar").get(path);
 
         RecordableHttpRequest requestRecording = getLast();
@@ -62,7 +62,7 @@ public class TestHttpGet extends AbstractHttpRecordingTestCase {
 
         String path = "/testpath";
 
-        LadybirdClient client = new LadybirdClient("http://localhost:8080");
+        LadybirdClient client = LadybirdClient.forLocalhost();
         client.acceptJson().get(path);
 
         RecordableHttpRequest requestRecording = getLast();
@@ -76,7 +76,7 @@ public class TestHttpGet extends AbstractHttpRecordingTestCase {
 
         String path = "/testpath";
 
-        LadybirdClient client = new LadybirdClient("http://localhost:8080");
+        LadybirdClient client = LadybirdClient.forLocalhost();
         client.withHeader("Foo", "Bar").acceptJson().get(path);
 
         RecordableHttpRequest requestRecording = getLast();
@@ -91,7 +91,7 @@ public class TestHttpGet extends AbstractHttpRecordingTestCase {
 
         String path = "/testpath";
 
-        LadybirdClient client = new LadybirdClient("http://localhost:8080");
+        LadybirdClient client = LadybirdClient.forLocalhost();
         client.acceptXml().get(path);
 
         RecordableHttpRequest requestRecording = getLast();
@@ -105,13 +105,37 @@ public class TestHttpGet extends AbstractHttpRecordingTestCase {
 
         String path = "/testpath";
 
-        LadybirdClient client = new LadybirdClient("http://localhost:8080");
+        LadybirdClient client = LadybirdClient.forLocalhost();
         client.withHeader("Foo", "Bar").acceptXml().get(path);
 
         RecordableHttpRequest requestRecording = getLast();
 
         assertEquals("Bar", requestRecording.getHeader("Foo"));
         assertEquals(ContentType.APPLICATION_XML.getMimeType(), requestRecording.getHeader("Accept"));
+
+    }
+
+    @Test
+    public void canProvideBasePathAtConstruction() {
+
+        LadybirdClient client = new LadybirdClient("http://localhost:8080");
+        client.get("");
+
+        RecordableHttpRequest requestRecording = getLast();
+
+        assertEquals("/", requestRecording.getPathInfo());
+
+    }
+
+    @Test
+    public void canNotProvideBasePathAtConstruction() {
+
+        LadybirdClient client = new LadybirdClient();
+        client.get("http://localhost:8080");
+
+        RecordableHttpRequest requestRecording = getLast();
+
+        assertEquals("/", requestRecording.getPathInfo());
 
     }
 
