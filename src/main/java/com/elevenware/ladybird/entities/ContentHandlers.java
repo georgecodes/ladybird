@@ -23,7 +23,7 @@ public class ContentHandlers {
 
     public ContentHandler forType(ContentType contentType, ContentType accept) {
         ContentHandler handler = handlers.get(contentType.getMimeType());
-        if(handler == null) {
+        if(handler == null && accept != null) {
             handler = handlers.get(accept.getMimeType());
         }
         if(handler == null) {

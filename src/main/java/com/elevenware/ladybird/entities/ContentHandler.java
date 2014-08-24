@@ -1,8 +1,5 @@
 package com.elevenware.ladybird.entities;
 
-import com.fasterxml.jackson.core.JsonGenerationException;
-
-import java.io.IOException;
 import java.io.InputStream;
 
 public interface ContentHandler {
