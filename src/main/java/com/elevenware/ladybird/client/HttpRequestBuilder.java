@@ -49,6 +49,12 @@ public class HttpRequestBuilder {
         return client.doPost(this, body);
     }
 
+    public HttpResponse post(String path, Object payload) {
+        ContentHandler handler = ContentHandlers.getInstance().forType(getContentType(), null);
+        String entity = handler.marshal(payload);
+        return post(path, entity);
+    }
+
     public HttpResponse put(String path, String body) {
         setPath(path);
         return client.doPut(this, body);
