@@ -64,6 +64,11 @@ public class LadybirdClient {
             .acceptXml();
     }
 
+    public HttpRequestBuilder acceptHtml() {
+        return new HttpRequestBuilder(delegate)
+            .acceptHtml();
+    }
+
     public HttpRequestBuilder sendJson() {
         return new HttpRequestBuilder(delegate)
                 .sendJson();
@@ -72,6 +77,11 @@ public class LadybirdClient {
     public HttpRequestBuilder sendXml() {
         return new HttpRequestBuilder(delegate)
                 .sendXml();
+    }
+
+    public HttpRequestBuilder sendHtml() {
+        return new HttpRequestBuilder(delegate)
+                .sendHtml();
     }
 
     static class HttpClientDelegate {

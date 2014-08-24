@@ -103,4 +103,11 @@ public class HttpRequestBuilder {
         return addHeader(CONTENT_TYPE, ContentType.APPLICATION_XML.getMimeType());
     }
 
+    public HttpRequestBuilder acceptHtml() {
+        return addHeader(ACCEPT, ContentType.TEXT_HTML.getMimeType());
+    }
+
+    public HttpRequestBuilder sendHtml() {
+        return addHeader(CONTENT_TYPE, ContentType.TEXT_HTML.getMimeType());
+    }
 }
