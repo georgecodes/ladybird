@@ -1,6 +1,6 @@
 apply from: 'build.gradle'
 
-//apply plugin: 'signing'
+apply plugin: 'signing'
 
 archivesBaseName='ladybird'
 
@@ -18,21 +18,21 @@ artifacts {
     archives jar, javadocJar, sourcesJar
 }
 
-//signing {
-//    sign configurations.archives
-//}
+signing {
+    sign configurations.archives
+}
 
 uploadArchives {
     repositories {
         mavenDeployer {
-//            beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+            beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
 
             repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
-                authentication(userName: System.getProperty('sonatype.username'), password: System.getProperty('sonatype.password'))
+                authentication(userName: sonatypeUsername, password: sonatypePassword)
             }
 
             snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
-                authentication(userName: System.getProperty('sonatype.username'), password: System.getProperty('sonatype.password'))
+                authentication(userName: sonatypeUsername, password: sonatypePassword)
             }
 
             pom.project {
