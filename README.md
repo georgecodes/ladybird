@@ -112,3 +112,4 @@ Ladybird uses [Jackson](http://jackson.codehaus.org/) for JSON marshalling and u
 ## Working with other content types
 
 The other popular format, of course, is XML. However, there are so many different ways that we can handle XML, that I've decided not to support XML directly in Ladybird. Instead, XML can be handled by including and registering a specific library for content handling. Writing these should be relatively trivial, I intend to provide a JAXB extension myself.
+test
